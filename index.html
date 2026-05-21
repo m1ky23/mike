@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michael Adu Kyei | Data Communication Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=Fira+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --deep: #0d2845;
+      --accent: #e8a020;
+      --gold: #f5c842;
+      --teal: #1a9e8f;
+      --light: #f4f0e8;
+      --muted: #c8c0b0;
+      --white: #ffffff;
+      --card-bg: #132d4f;
+      --card-border: rgba(232,160,32,0.18);
+      --shadow: 0 8px 40px rgba(11,31,58,0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--navy);
+      color: var(--light);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      background: rgba(11, 31, 58, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 30px;
+      border: 1px solid transparent;
+      transition: all 0.25s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+      border-color: var(--card-border);
+      background: rgba(232,160,32,0.08);
+    }
+
+    /* ─── HERO / ABOUT ─────────────────────────────────── */
+    #about {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 8% 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #about::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(26,158,143,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    #about::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,160,32,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .about-inner {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-photo-wrapper {
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .profile-photo-frame {
+      width: 240px;
+      height: 300px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 0 8px rgba(232,160,32,0.1), var(--shadow);
+      background: var(--card-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-photo-frame:hover { transform: translateY(-4px); }
+
+    .profile-photo-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .photo-placeholder svg {
+      opacity: 0.4;
+    }
+
+    .photo-placeholder p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .photo-upload-input { display: none; }
+
+    .upload-photo-btn {
+      position: absolute;
+      bottom: -14px; right: -14px;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(232,160,32,0.4);
+      transition: transform 0.2s;
+    }
+
+    .upload-photo-btn:hover { transform: scale(1.1); }
+
+    .deco-tag {
+      position: absolute;
+      top: -16px; left: -16px;
+      background: var(--teal);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
+    .about-text { flex: 1; }
+
+    .label-tag {
+      display: inline-block;
+      font-family: 'Fira Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: rgba(26,158,143,0.12);
+      border: 1px solid rgba(26,158,143,0.3);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    .about-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .about-text h1 span { color: var(--accent); }
+
+    .about-text .subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+
+    .about-text p {
+      font-size: 0.97rem;
+      line-height: 1.85;
+      color: rgba(244,240,232,0.82);
+      max-width: 560px;
+      margin-bottom: 16px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 28px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .stat-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .stat-chip strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-chip span {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    /* ─── SECTION SHARED ──────────────────────────────── */
+    section:not(#about) {
+      padding: 100px 8%;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .section-header h2 span { color: var(--accent); }
+
+    .section-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .divider {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--teal));
+      border-radius: 2px;
+      margin: 16px auto 0;
+    }
+
+    /* ─── COURSE SUMMARY ──────────────────────────────── */
+    #course {
+      background: linear-gradient(180deg, var(--navy) 0%, var(--deep) 100%);
+    }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .topic-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 28px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topic-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(180deg, var(--accent), var(--teal));
+      border-radius: 4px 0 0 4px;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    }
+
+    .topic-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      background: rgba(232,160,32,0.12);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      font-size: 1.3rem;
+    }
+
+    .topic-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .topic-card p {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: rgba(244,240,232,0.72);
+    }
+
+    .topic-card ul {
+      list-style: none;
+      margin-top: 10px;
+    }
+
+    .topic-card ul li {
+      font-size: 0.82rem;
+      color: rgba(244,240,232,0.68);
+      line-height: 1.7;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .topic-card ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .topic-card .morse-table {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .morse-cell {
+      background: rgba(11,31,58,0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 5px 8px;
+      text-align: center;
+    }
+
+    .morse-cell .letter {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .morse-cell .code {
+      display: block;
+      font-family: 'Fira Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--teal);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── ASSIGNMENTS ─────────────────────────────────── */
+    #assignments {
+      background: var(--navy);
+    }
+
+    .assignments-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      max-width: 960px;
+      margin: 0 auto 60px;
+    }
+
+    .assignment-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transition: box-shadow 0.3s;
+    }
+
+    .assignment-card:hover {
+      box-shadow: 0 12px 32px rgba(0,0,0,0.28);
+    }
+
+    .asgn-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .asgn-icon {
+      width: 50px; height: 50px;
+      border-radius: 12px;
+      background: rgba(232,160,32,0.1);
+      border: 1px solid var(--card-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .asgn-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .asgn-header p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Doc assignment */
+    .doc-display {
+      background: rgba(11,31,58,0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .doc-display:hover {
+      background: rgba(232,160,32,0.07);
+      transform: translateY(-2px);
+    }
+
+    .doc-file-icon {
+      width: 52px; height: 64px;
+      background: #1e4785;
+      border-radius: 6px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-bottom: 8px;
+      flex-shrink: 0;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .doc-file-icon::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 0 16px 16px 0;
+      border-color: transparent var(--card-bg) transparent transparent;
+    }
+
+    .doc-file-icon .doc-type {
+      font-family: 'Fira Mono', monospace;
+      font-size: 0.62rem;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      background: rgba(255,255,255,0.15);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    .doc-info h4 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .doc-info p {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .open-tag {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* Image upload slot */
+    .img-upload-zone {
+      border: 2px dashed rgba(232,160,32,0.3);
+      border-radius: 10px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .img-upload-zone:hover {
+      border-color: var(--accent);
+      background: rgba(232,160,32,0.04);
+    }
+
+    .img-upload-zone input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+
+    .img-upload-zone .upload-icon { font-size: 2rem; opacity: 0.5; margin-bottom: 8px; }
+
+    .img-upload-zone p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .img-upload-zone p span { color: var(--accent); font-weight: 600; }
+
+    .preview-img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* YouTube */
+    .video-section {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .video-label {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+
+    .video-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      background: rgba(6,16,30,0.95);
+      border-top: 1px solid var(--card-border);
+      padding: 32px 8%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    footer p {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+
+    /* ─── PORTRAIT FRAME ────────────────────────────── */
+    .portrait-frame {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 0 6px rgba(232,160,32,0.12), var(--shadow);
+      flex-shrink: 0;
+    }
+
+    .portrait-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ─── SCROLL REVEAL ──────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 768px) {
+      .about-inner { flex-direction: column; gap: 40px; text-align: center; }
+      .about-text p { margin: 0 auto 16px; }
+      .stats-row { justify-content: center; }
+      .assignments-layout { grid-template-columns: 1fr; }
+      .topics-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 4%; }
+      .nav-logo { display: none; }
+      .nav-links a { padding: 7px 14px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">MAK Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#about" class="active">About Me</a></li>
+    <li><a href="#course">Course Summary</a></li>
+    <li><a href="#assignments">Assignments</a></li>
+  </ul>
+</nav>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+
+    <div class="profile-photo-wrapper">
+      <span class="deco-tag">Level 200</span>
+       <div class="about-hero">
+    <div class="portrait-col">
+      <div class="portrait-frame">
+      <!--<div class="profile-photo-frame" onclick="document.getElementById('photoInput').click()"></div>-->
+        <!-- ↓ Replace "profile.png" with your actual profile picture filename -->
+        <img id="profileImg" src="profile.png" alt="Michael Adu Kyei" />
+      </div>
+      <!-- ↓ Replace "profile.png" with your actual profile picture filename -->
+      
+    </div>
+
+    <div class="about-text">
+      <div class="label-tag">Student Portfolio · 2024/2025</div>
+      <h1>Michael <span>Adu Kyei</span></h1>
+      <p class="subtitle">BSc Information Technology · Pentecost University</p>
+      <p>
+        I am a Level 200 student at Pentecost University, pursuing my degree with a deep passion for 
+        technology and data communication. My academic journey has been shaped by curiosity — a drive 
+        to understand not just how systems work, but why they matter.
+      </p>
+      <p>
+        Dedication and determination are not just words I use — they define how I approach every assignment, 
+        every challenge, and every opportunity to grow. I set clear goals and pursue them relentlessly, 
+        refusing to let obstacles become excuses. Whether it is mastering complex networking concepts or 
+        developing practical technical skills, I bring full commitment to everything I do.
+      </p>
+      <p>
+        My ambition is to become a highly skilled IT professional who contributes meaningfully to 
+        Ghana's digital transformation — and beyond. Every semester is a step closer to that goal.
+      </p>
+      <div class="stats-row">
+        <div class="stat-chip">
+          <strong>200</strong>
+          <span>Level</span>
+        </div>
+        <div class="stat-chip">
+          <strong>PU</strong>
+          <span>Pentecost Univ.</span>
+        </div>
+        <div class="stat-chip">
+          <strong>IT</strong>
+          <span>Programme</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COURSE SUMMARY -->
+<section id="course">
+  <div class="section-header reveal">
+    <div class="label-tag" style="margin:0 auto 16px;">Academic Content</div>
+    <h2>Course <span>Summary</span></h2>
+    <p>A structured overview of all topics covered in the Data Communication course this semester.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="topics-grid">
+
+    <!-- 1: Intro to Data Communication -->
+    <div class="topic-card reveal">
+      <div class="topic-icon">📡</div>
+      <h3>Introduction to Data Communication</h3>
+      <p><strong style="color:var(--accent)">What is Data Communication?</strong><br/>
+        Data communication is the process of transferring data between two or more devices through a transmission medium. For communication to occur, there must be a sender, receiver, message, transmission medium, and protocol.
+      </p>
+      <ul>
+        <li><strong>Network Models:</strong> The OSI (7-layer) and TCP/IP models define how data travels across networks — from physical hardware up to application-level services.</li>
+        <li><strong>Physical Layer & Media:</strong> Covers the actual transmission of raw bits over physical media including twisted pair cables, coaxial cable, fiber optics, and wireless channels.</li>
+        <li><strong>Data and Signals:</strong> Data exists in analog or digital forms. Signals — the representation of data — can be analog (continuous waveforms) or digital (discrete pulses). Key properties include amplitude, frequency, and phase.</li>
+      </ul>
+    </div>
+
+    <!-- 2: Evolution -->
+    <div class="topic-card reveal">
+      <div class="topic-icon">⏳</div>
+      <h3>Evolution of Data Communication</h3>
+      <ul>
+        <li><strong>Early Systems:</strong> Humans have always needed to communicate over distance. Smoke signals, semaphore flags, and light-based heliographs were among the earliest methods, encoding information through visual patterns.</li>
+        <li><strong>Electrical Systems:</strong> The telegraph marked a revolution — information could now travel at the speed of electricity through wires, breaking the physical barrier of distance.</li>
+        <li><strong>Modern Digital Networks:</strong> The internet, mobile networks, and fibre optic cables represent today's digital infrastructure — enabling near-instantaneous global communication.</li>
+        <li><strong>Core Principles:</strong> Throughout all eras, the fundamentals remain: a sender encodes a message, transmits it through a medium (via a signal), and a receiver decodes it. What has changed is speed, distance, and capacity.</li>
+        <li><strong>Legacy Influence:</strong> Concepts like encoding, modulation, and signal transmission originated in early systems and are still foundational in modern protocols.</li>
+      </ul>
+    </div>
+
+    <!-- 3: PGP -->
+    <div class="topic-card reveal">
+      <div class="topic-icon">🔐</div>
+      <h3>Pretty Good Privacy (PGP) & Secure Communication</h3>
+      <p>PGP is an encryption programme that provides cryptographic privacy and authentication for digital communications. It is widely used for securing emails and files.</p>
+      <ul>
+        <li><strong>Encryption/Decryption:</strong> PGP encrypts data using a public key; only the holder of the corresponding private key can decrypt it.</li>
+        <li><strong>Digital Signatures:</strong> A sender signs a message with their private key, allowing recipients to verify authenticity and detect tampering.</li>
+        <li><strong>Key Management:</strong> PGP uses a "web of trust" — users exchange public keys and sign each other's keys to establish identity.</li>
+        <li><strong>Symmetric + Asymmetric:</strong> PGP combines both — it uses asymmetric (RSA) cryptography to exchange a session key, then symmetric (AES) for the actual data, balancing security and speed.</li>
+        <li><strong>Security Goals:</strong> Confidentiality (only intended recipient reads it), Integrity (message unchanged), Authentication (verified sender), Non-repudiation (sender cannot deny sending).</li>
+        <li><strong>Limitations:</strong> Complex key management, susceptibility if private key is compromised, and usability challenges for non-technical users.</li>
+      </ul>
+    </div>
+
+    <!-- 4: Satellite -->
+    <div class="topic-card reveal">
+      <div class="topic-icon">🛰️</div>
+      <h3>Satellite Communication Systems</h3>
+      <p>Satellite communication relays signals between distant points on Earth via orbiting spacecraft, enabling global coverage beyond terrestrial networks.</p>
+      <ul>
+        <li><strong>Components:</strong> Ground station (uplink transmitter/receiver), satellite transponder (receives, amplifies, and retransmits), and downlink to the destination.</li>
+        <li><strong>Signal Path:</strong> Data travels from a transmitting ground station up to the satellite (uplink), the transponder converts and boosts the frequency, then sends it down (downlink) to a receiving station.</li>
+        <li><strong>Orbit Types:</strong> <em>GEO</em> (35,786 km) — stationary appearance, ideal for TV broadcasting; <em>MEO</em> — used by GPS; <em>LEO</em> (500–2,000 km) — low latency, used by Starlink.</li>
+        <li><strong>Advantages:</strong> Wide geographic coverage, ability to reach remote areas, and excellent broadcast capability.</li>
+        <li><strong>Limitations:</strong> High latency in GEO orbits (~600ms round-trip), signal attenuation due to rain or interference, and significant deployment costs.</li>
+      </ul>
+    </div>
+
+    <!-- 5: Telegraph -->
+    <div class="topic-card reveal" style="grid-column: span 1;">
+      <div class="topic-icon">⚡</div>
+      <h3>Telegraph & Morse Code</h3>
+      <p>The electric telegraph was a 19th-century invention that transmitted coded messages over long distances through electrical pulses in a wire. A telegraph key made and broke the circuit to form signals; operators at the receiving end decoded clicks into text.</p>
+      <p style="margin-top:10px"><strong style="color:var(--accent)">Morse Code</strong> represents letters and numbers as combinations of short (·) and long (–) signals — dots and dashes.</p>
+      <div class="morse-table">
+        <div class="morse-cell"><span class="letter">A</span><span class="code">· –</span></div>
+        <div class="morse-cell"><span class="letter">B</span><span class="code">– · · ·</span></div>
+        <div class="morse-cell"><span class="letter">C</span><span class="code">– · – ·</span></div>
+        <div class="morse-cell"><span class="letter">D</span><span class="code">– · ·</span></div>
+        <div class="morse-cell"><span class="letter">E</span><span class="code">·</span></div>
+        <div class="morse-cell"><span class="letter">F</span><span class="code">· · – ·</span></div>
+        <div class="morse-cell"><span class="letter">G</span><span class="code">– – ·</span></div>
+        <div class="morse-cell"><span class="letter">H</span><span class="code">· · · ·</span></div>
+        <div class="morse-cell"><span class="letter">I</span><span class="code">· ·</span></div>
+        <div class="morse-cell"><span class="letter">J</span><span class="code">· – – –</span></div>
+        <div class="morse-cell"><span class="letter">K</span><span class="code">– · –</span></div>
+        <div class="morse-cell"><span class="letter">L</span><span class="code">· – · ·</span></div>
+        <div class="morse-cell"><span class="letter">M</span><span class="code">– –</span></div>
+        <div class="morse-cell"><span class="letter">N</span><span class="code">– ·</span></div>
+        <div class="morse-cell"><span class="letter">O</span><span class="code">– – –</span></div>
+      </div>
+    </div>
+
+    <!-- 6: Wireless / PoE -->
+    <div class="topic-card reveal">
+      <div class="topic-icon">📶</div>
+      <h3>Extending Hub-Based Ethernet to Wireless Using APs & PoE</h3>
+      <ul>
+        <li><strong>Hub-Based Ethernet:</strong> A hub is a shared medium — all devices on a hub share the same bandwidth. It uses CSMA/CD (Carrier Sense Multiple Access / Collision Detection) to manage simultaneous transmissions.</li>
+        <li><strong>Wireless Networks (CSMA/CA):</strong> Wireless cannot detect collisions like wired networks, so it uses CSMA/CA (Collision Avoidance) — devices wait for a clear channel before transmitting and use RTS/CTS to reduce collisions.</li>
+        <li><strong>Access Point (AP):</strong> The AP bridges the wired (Ethernet) and wireless segments. Devices connect wirelessly to the AP, which forwards their traffic onto the wired network.</li>
+        <li><strong>Power over Ethernet (PoE):</strong> PoE delivers electrical power along with data through standard Ethernet cables, eliminating the need for separate power supplies for APs.</li>
+        <li><strong>Deployment Strategies:</strong> AP placement should consider coverage overlap, interference, the number of users, and physical obstructions. Proper cabling and VLAN segmentation improve performance.</li>
+        <li><strong>Performance:</strong> Moving from a hub to a switch+AP setup reduces collisions and improves throughput significantly. Wireless introduces additional latency and is affected by interference.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ASSIGNMENTS -->
+<section id="assignments">
+  <div class="section-header reveal">
+    <div class="label-tag" style="margin:0 auto 16px;">Submitted Work</div>
+    <h2>My <span>Assignments</span></h2>
+    <p>Below are the assignments submitted during the semester. Click the document to open it, and upload your image assignment below.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="assignments-layout reveal">
+
+    <!-- Assignment 1: Document -->
+    <div class="assignment-card">
+      <div class="asgn-header">
+        <div class="asgn-icon">📄</div>
+        <div>
+          <h3>Assignment 1 — Document</h3>
+          <p>Click the file below to open in a new tab</p>
+        </div>
+      </div>
+
+      <a class="doc-display" href="PUIT25120007_DATA COMMUNICATION ASSIGNMNET.docx" target="_blank" rel="noopener noreferrer" title="Open Assignment 1 Document">
+        <div class="doc-file-icon">
+          <span class="doc-type">DOC</span>
+        </div>
+        <div class="doc-info">
+          <h4>PUIT25120007_DATA_COMMUNICATION<br/>_ASSIGNMNET.docx</h4>
+          <p>Data Communication · Semester Work</p>
+        </div>
+        <span class="open-tag">
+          Open
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 13v6H6V7h6M15 3h6v6M10 14L21 3"/>
+          </svg>
+        </span>
+      </a>
+
+      <p style="font-size:0.78rem;color:var(--muted);line-height:1.6;">
+        📎 Click the document icon above to open and review the full assignment.
+      </p>
+    </div>
+
+    <!-- Assignment 2: Image -->
+    <div class="assignment-card">
+      <div class="asgn-header">
+        <div class="asgn-icon">🖼️</div>
+        <div>
+          <h3>Assignment 2 — Image</h3>
+          <p>Add your assignment image below</p>
+        </div>
+      </div>
+
+      <!-- ↓ Replace "assignment2.png" with your actual assignment image filename -->
+      <img src="key.jpg" alt="Assignment 2" style="width:100%;border-radius:10px;border:1px solid var(--card-border);display:block;" />
+    </div>
+
+  </div>
+
+  <!-- YouTube Video -->
+  <div class="video-section reveal">
+    <span class="video-label">📺 Course Resource</span>
+    <h3>Introduction to Data Communication — Video Lesson</h3>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/3QhU9jd03a0"
+        title="Introduction to Data Communication"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Michael Adu Kyei</div>
+  <p>Level 200 · Pentecost University · Data Communication Portfolio</p>
+  <p style="font-size:0.75rem">Built for academic submission · <a href="https://vercel.com" target="_blank">Deploy on Vercel</a></p>
+</footer>
+
+<script>
+  // ─── Scroll reveal ───────────────────────────────────
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ─── Nav active state on scroll ──────────────────────
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
